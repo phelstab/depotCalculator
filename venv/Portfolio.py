@@ -18,59 +18,51 @@ class Portfolio:
 
 
 
-def calcIndex(stockName):
+def calcStock(stockName):
     stockInfo = yf.Ticker(stockName)
-    # some JSON:
+    # get JSON through API:
     x = stockInfo.info
 
     # parse x:
     s1 = json.dumps(x)
     d2 = json.loads(s1)
 
-    # the result is a Python dictionary:
-    return (d2['previousClose'])
+    return (d2['previousClose'], d2['longName'])
 
-def getName(stockName):
-    stockInfo = yf.Ticker(stockName)
-    # some JSON:
-    x = stockInfo.info
 
-    # parse x:
-    s1 = json.dumps(x)
-    d2 = json.loads(s1)
+def calcProp(share,price):
 
-    # the result is a Python dictionary:
-    return (d2['longName'])
+    pay = Portfolio.pay
+    prop =  math.floor((pay * share) / (price))
 
-stockPrice1 = calcIndex(Portfolio.stock1)
-stockPrice2 = calcIndex(Portfolio.stock2)
-stockPrice3 = calcIndex(Portfolio.stock3)
-stockName1 = getName(Portfolio.stock1)
-stockName2 = getName(Portfolio.stock2)
-stockName3 = getName(Portfolio.stock3)
-print(stockName1 , ': ' , stockPrice1 , ' €')
-print(stockName2 , ': ' , stockPrice2 , ' €')
-print(stockName3 , ': ' , stockPrice3 , ' €')
-
+    return prop
 
 def portfolioCalcu():
 
-    rest1 = (Portfolio.pay * Portfolio.share1) % (stockPrice1)
-    rest2 = (Portfolio.pay * Portfolio.share2) % (stockPrice2)
-    rest3 = (Portfolio.pay * Portfolio.share1) % (stockPrice3)
+    price1, name1 = calcStock(Portfolio.stock1)
+    price2, name2 = calcStock(Portfolio.stock2)
+    price3, name3 = calcStock(Portfolio.stock3)
 
-    prop1 = math.floor((Portfolio.pay * Portfolio.share1) / (stockPrice1))
-    prop2 = math.floor((Portfolio.pay * Portfolio.share2) / (stockPrice2))
-    prop3 = math.floor((Portfolio.pay * Portfolio.share3) / (stockPrice3))
+    prop1 = calcProp(Portfolio.share1, price1)
+    prop2 = calcProp(Portfolio.share2, price2)
+    prop3 = calcProp(Portfolio.share3, price3)
 
-    outgoings = prop1 * stockPrice1 + prop2 * stockPrice2 + prop3 * stockPrice3
+    outgoings = prop1 * price1 + prop2 * price2 + prop3 * price3
     bank = Portfolio.pay - outgoings
 
-    print('____________')
-    print('Buy (Amount) of', stockName1 , ': ' , prop1 )
-    print('Buy (Amount) of', stockName2 , ': ' , prop2 )
-    print('Buy (Amount) of', stockName3 , ': ' , prop3 )
-    print('Outgoings: ' , outgoings , ' €')
-    print('Left on Bank: ' , bank , ' €')
+    return (price1, price2, price3, name1, name2, name3, prop1, prop2, prop3, outgoings, bank)
 
-portfolioCalcu()
+def __printResult__():
+    p1, p2, p3, n1, n2, n3, p1, p2, p3, o, b = portfolioCalcu()
+    print('________________Current Prices________________')
+    print(n1, ': ', p1, ' €')
+    print(n2, ': ', p2, ' €')
+    print(n3, ': ', p3, ' €')
+    print('________________Consulting____________________')
+    print('Buy (Amount) of', n1, ': ', p1)
+    print('Buy (Amount) of', n2, ': ', p2)
+    print('Buy (Amount) of', n3, ': ', p3)
+    print('Outgoings: ', o, ' €')
+    print('Left on Bank: ', b, ' €')
+
+__printResult__()
