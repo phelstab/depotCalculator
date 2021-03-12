@@ -1,6 +1,18 @@
-# depotCalculator
-Current Stock Prices through Yahoo API and calculate depot amount of stocks
+# Depot Rechner
+Marktpreise durch Yahoo Finance, Welche ETF's zu kaufen sind in welchem Verhältnis nach Gewichtung. 
 
+# Fundamentalanalyse Rechner
+- Kurs Gewinn Verhältnis
+- Kurs Buchwert Verhältnis
+- Kurs Umsatz Verhältnis
+- Gesamtkapitalrendite
+- Eigenkapitalquote
+- Market to Revenue
+
+Auswertung der Kennzahlen
 
 # To Do
-- gui
+- GUI
+- x1
+- x2
+- x3
